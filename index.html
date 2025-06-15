@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WT777 Premium Prediction</title>
+    <style>
+        /* Basic Styles */
+        body {
+            background-color: #000;
+            color: #00ff00;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            overflow-x: hidden; /* Prevents horizontal scroll from popup */
+        }
+
+        .container {
+            width: 95%;
+            max-width: 400px;
+            padding: 20px;
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            box-shadow: 0 0 20px #00ff00;
+            z-index: 10;
+        }
+
+        /* Headings and Text */
+        h2 {
+            text-shadow: 0 0 10px #00ff00;
+        }
+        p {
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        /* Inputs and Buttons */
+        input[type="text"], input[type="password"] {
+            width: 80%;
+            padding: 12px;
+            margin: 10px 0;
+            background-color: #111;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            color: #00ff00;
+            font-size: 16px;
+        }
+        input::placeholder {
+            color: #009900;
+        }
+
+        button {
+            width: 85%;
+            padding: 15px;
+            background-color: #00ff00;
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background-color: #fff;
+            box-shadow: 0 0 15px #00ff00;
+        }
+        
+        /* WhatsApp Button Style */
+        .whatsapp-btn {
+            background-color: #25D366;
+            color: white;
+            text-decoration: none;
+            display: inline-flex; 
+            align-items: center;
+            justify-content: center;
+            gap: 10px; 
+            margin-top: 15px;
+            width: 80%; 
+            padding: 15px; 
+            border-radius: 5px; 
+            font-weight: bold; 
+            font-size: 16px;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+        .whatsapp-btn:hover {
+            background-color: #128C7E;
+            transform: scale(1.05); 
+        }
+
+        /* Error Message */
+        #error-msg {
+            color: #ff0000;
+            margin-top: 10px;
+            font-weight: bold;
+            height: 20px;
+        }
+
+        /* Dashboard Styles */
+        #dashboard-page { display: none; }
+        .prediction-box {
+            border: 2px dashed #00ff00;
+            padding: 30px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+        #prediction-result {
+            font-size: 48px;
+            font-weight: bold;
+            text-shadow: 0 0 15px #00ff00;
+            min-height: 60px;
+        }
+        #timer { font-size: 24px; color: #ffff00; margin-top: 10px; }
+        .live-visitors { margin-top: 20px; font-size: 14px; color: #aaa; }
+        .eye-icon { display: inline-block; vertical-align: middle; margin-right: 5px; }
+
+        /* Popup Notification Styles */
+        #popup-notification {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: rgba(0, 0, 0, 0.9);
+            color: #fff;
+            padding: 15px 20px;
+            border-radius: 8px;
+            border: 1px solid #00ff00;
+            box-shadow: 0 0 15px #00ff00;
+            font-size: 14px;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(100px);
+            transition: all 0.5s ease-in-out;
+        }
+        #popup-notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Login Page Container -->
+    <div class="container" id="login-page">
+        <h2>🎮 WT777 Premium Prediction 🎮</h2>
+        <p>This is a subscription-based service. For access, please contact the Admin.</p>
+        
+        <a href="https://wa.me/923188302734?text=Hi%20Admin,%20I%20want%20to%20buy%20the%20WT777%20subscription." 
+           target="_blank" 
+           class="whatsapp-btn">
+           <span>💬</span>
+           <span>Click for Subscription (PKR 500)</span>
+        </a>
+        
+        <hr style="border-color: #00ff0033; margin: 25px 0;">
+        
+        <p>If you have a User ID and Password, please log in below.</p>
+        
+        <input type="text" id="username" placeholder="Enter User ID">
+        <input type="password" id="password" placeholder="Enter Password">
+        
+        <div id="error-msg"></div>
+        
+        <button onclick="handleLogin()">Login</button>
+    </div>
+
+    <!-- Dashboard Page Container (Hidden by default) -->
+    <div class="container" id="dashboard-page">
+        <h2>🔥 WT777 Live Predictions 🔥</h2>
+        <p>A new prediction will appear every 30 seconds.</p>
+        <div class="prediction-box">
+            <p style="color: #ccc; margin: 0;">Next Prediction:</p>
+            <div id="prediction-result">PREDICTING...</div>
+            <div id="timer">New prediction in 30 seconds...</div>
+        </div>
+        <div class="live-visitors">
+            <span class="eye-icon">👁️</span> <span id="visitor-count">48</span> Live Visitors
+        </div>
+        <button onclick="handleLogout()">Logout</button>
+    </div>
+
+    <!-- Popup Notification HTML -->
+    <div id="popup-notification">
+        <span id="popup-text"></span>
+    </div>
+
+    <script>
+        // --- CONFIGURATION ---
+        const CORRECT_USERNAME = "490867";
+        const CORRECT_PASSWORD = "ajkmods";
+        // --- END CONFIGURATION ---
+
+        const loginPage = document.getElementById('login-page');
+        const dashboardPage = document.getElementById('dashboard-page');
+        const errorMsg = document.getElementById('error-msg');
+
+        function handleLogin() {
+            const usernameInput = document.getElementById('username').value;
+            const passwordInput = document.getElementById('password').value;
+            if (usernameInput === CORRECT_USERNAME && passwordInput === CORRECT_PASSWORD) {
+                loginPage.style.display = 'none';
+                dashboardPage.style.display = 'block';
+                startPredictionEngine();
+            } else {
+                errorMsg.textContent = 'Incorrect User ID or Password!';
+                setTimeout(() => { errorMsg.textContent = ''; }, 3000);
+            }
+        }
+
+        function handleLogout() {
+            location.reload();
+        }
+
+        let predictionInterval;
+        function startPredictionEngine() {
+            const predictionResultEl = document.getElementById('prediction-result');
+            const timerEl = document.getElementById('timer');
+            let countdown = 30;
+
+            const generatePrediction = () => {
+                predictionResultEl.textContent = 'ANALYSING...';
+                predictionResultEl.style.color = '#ffff00';
+                setTimeout(() => {
+                    const prediction = Math.random() < 0.5 ? "TIGER 🐯" : "DRAGON 🐲";
+                    predictionResultEl.textContent = prediction;
+                    predictionResultEl.style.color = '#00ff00';
+                    countdown = 30;
+                }, 2000);
+            };
+
+            generatePrediction();
+            predictionInterval = setInterval(() => {
+                countdown--;
+                timerEl.textContent = `New prediction in ${countdown} seconds...`;
+                if (countdown <= 0) {
+                    generatePrediction();
+                }
+            }, 1000);
+        }
+
+        const visitorCountEl = document.getElementById('visitor-count');
+        let visitors = 48;
+        setInterval(() => {
+            const change = Math.floor(Math.random() * 5) - 2;
+            visitors += change;
+            if (visitors < 35) visitors = 35;
+            if (visitors > 90) visitors = 90;
+            visitorCountEl.textContent = visitors;
+        }, 3500);
+
+        // --- POPUP NOTIFICATION LOGIC ---
+        const popupElement = document.getElementById('popup-notification');
+        const popupTextElement = document.getElementById('popup-text');
+        
+        const pakistaniNames = [
+            "Ali Raza", "Ahmed Khan", "Fatima Jutt", "Ayesha Bibi", "Bilal Ahmed", "Usman Ghani", "Saad Ali", "Zainab Malik",
+            "Hassan Mirza", "Imran Butt", "Kashif Mehmood", "Nadia Perveen", "Sana Iqbal", "Faisal Qureshi", "Yasir Shah",
+            "Sobia Khan", "Tariq Aziz", "Amir Sohail", "Junaid Akram", "Hina Rabbani", "Shahid Afridi", "Wasim Akram",
+            "Moin Khan", "Saeed Anwar", "Iqra Aziz", "Fawad Khan", "Mahira Khan", "Sajal Aly", "Atif Aslam", "Rahat Fateh Ali"
+        ];
+
+        function showPopup() {
+            const randomName = pakistaniNames[Math.floor(Math.random() * pakistaniNames.length)];
+            
+            // --- TEXT CHANGED TO ENGLISH HERE ---
+            popupTextElement.textContent = `🎉 ${randomName} just purchased the subscription!`;
+            popupElement.classList.add('show');
+            
+            setTimeout(() => {
+                popupElement.classList.remove('show');
+            }, 5000);
+        }
+
+        setTimeout(showPopup, 4000);
+
+        setInterval(showPopup, Math.random() * (20000 - 15000) + 15000);
+
+    </script>
+
+</body>
+</html>
